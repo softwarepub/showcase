@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+title: HERMES Showcase
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Ahsoka
+    family-names: Tano
+    email: tano@jeditemple.force
+    affiliation: Jedi Temple Coruscant
+    orcid: 'https://orcid.org/5555-7567-1409-5385'
