@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "showcase"
+version = "0.0.1"
+description = "Demonstrator for HERMES workflow"
+homepage = "https://software-metadata.pub"
+license = "Apache-2.0"
+authors = [
+    "Ahsoka Tano <tano@jeditemple.force>"
+]
+
+readme = "README.md"
+repository = "https://github.com/hermes-hmc/showcase"
+documentation = "https://docs.software-metadata.pub"
+keywords = ["publishing", "metadata", "automation"]
+
+#[tool.poetry.dependencies]
+#python = "^3.10"
+
+[build-system]
+requires = ["poetry-core>=1.2.0"]
+build-backend = "poetry.core.masonry.api"
