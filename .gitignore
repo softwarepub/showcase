@@ -1,0 +1,20 @@
+# Python files not to be version controlled
+
+__pycache__
+
+.coverage
+htmlcov
+.pytest_cache
+
+/dist/
+
+.idea/
+.tool-versions
+.venv/
+dist/
+
+# HERMES workflow specifics
+.hermes
+hermes-audit.md
+hermes.log
+quickfix.sh
