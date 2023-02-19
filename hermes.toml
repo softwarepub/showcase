@@ -1,0 +1,15 @@
+# Configuration for HERMES workflow to publish this software to Zenodo Sandbox
+# See also docs at https://docs.software-metadata.pub for more info.
+
+[harvest]
+from = [ "cff", "git" ]
+
+[harvest.cff]
+validate = false
+
+[deposit]
+mapping = "invenio"
+target = "invenio"
+
+[deposit.invenio]
+base_url = "https://sandbox.zenodo.org"
