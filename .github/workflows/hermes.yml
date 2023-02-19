@@ -7,6 +7,9 @@ jobs:
   hermes:
     name: HERMES
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # We will only read content from the repo
+      # pull-requests: write # Postprocessing should be able to create a pull request with changes
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v4
@@ -14,4 +17,6 @@ jobs:
           python-version: '3.10'
       - run: pip install git+https://github.com/hermes-hmc/workflow.git
       - run: hermes
-      - run: hermes deposit
+      - run: hermes deposit --auth-token ${{ secrets.ZENODO_SANDBOX }}
+      # - run: hermes postprocess # (Not implemented yet)
+      # - uses: peter-evans/create-pull-request@v4 (TODO once postprocessing has it)
