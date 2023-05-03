@@ -4,6 +4,7 @@ message: >-
   If you use this software, please cite it using the
   metadata from this file.
 type: software
+license: CC0
 authors:
   - given-names: Ahsoka
     family-names: Tano
