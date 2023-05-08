@@ -9,16 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read # We will only read content from the repo
-      # pull-requests: write # Postprocessing should be able to create a pull request with changes
+      pull-requests: write # Postprocessing should be able to create a pull request with changes
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - run: pip install git+https://github.com/hermes-hmc/workflow.git@develop
+      - run: pip install git+https://github.com/hermes-hmc/workflow.git@feature/174-post-processing
       - run: git archive --format zip HEAD src > showcase.zip
       - run: hermes
       - run: hermes curate
-      - run: hermes deposit --auth-token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
-      # - run: hermes postprocess # (Not implemented yet)
-      # - uses: peter-evans/create-pull-request@v4 (TODO once postprocessing has it)
+      - run: hermes deposit --initial --auth-token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
+      - run: hermes postprocess
+      - uses: peter-evans/create-pull-request@v4
