@@ -13,6 +13,7 @@ target = "invenio"
 
 [deposit.invenio]
 site_url = "https://sandbox.zenodo.org"
+access_right = "open"
 
 [post]
 process = [ "config_record_id", "cff_doi" ]

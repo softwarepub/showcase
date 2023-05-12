@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - run: pip install git+https://github.com/hermes-hmc/workflow.git@feature/174-post-processing
+      - run: pip install git+https://github.com/hermes-hmc/workflow.git@testing
       - run: git archive --format zip HEAD src > showcase.zip
       - run: hermes
       - run: hermes curate
