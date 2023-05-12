@@ -8,7 +8,7 @@ jobs:
     name: HERMES
     runs-on: ubuntu-latest
     permissions:
-      contents: read # We will only read content from the repo
+      contents: write # Allow creation of new branches
       pull-requests: write # Postprocessing should be able to create a pull request with changes
     steps:
       - uses: actions/checkout@v2
