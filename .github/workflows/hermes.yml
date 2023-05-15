@@ -3,7 +3,8 @@ name: Software Publication
 on:
   push:
   pull_request:
-    - [closed]
+    types:
+      - closed
 
 jobs:
   hermes-prepare:
@@ -37,6 +38,7 @@ jobs:
 
 #  hermes_curate:
 #    name: Curate HERMES results
+#    if: github.event.pull_request.merged == true
 #    steps:
 #      - run: git archive --format zip HEAD src > showcase.zip
 #      - run: hermes deposit --initial --auth-token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
