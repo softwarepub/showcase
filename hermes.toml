@@ -14,4 +14,3 @@ validate = false
 [deposit.invenio]
 site_url = "https://sandbox.zenodo.org"
 access_right = "open"
-record_id = 1202606
