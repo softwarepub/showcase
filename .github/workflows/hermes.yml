@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  hermes:
+  hermes-prepare:
     name: HERMES
     runs-on: ubuntu-latest
     permissions:
@@ -16,9 +16,25 @@ jobs:
         with:
           python-version: '3.10'
       - run: pip install git+https://github.com/hermes-hmc/workflow.git@testing
-      - run: git archive --format zip HEAD src > showcase.zip
-      - run: hermes
+      - run: hermes # harvest + process
       - run: hermes curate
-      - run: hermes deposit --initial --auth-token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
-      - run: hermes postprocess
+      - run: git branch -c curated-metadata
+      - run: git push origin curated-metadata
       - uses: peter-evans/create-pull-request@v4
+        with:
+          base: curated-metadata
+          branch: to-be-curated
+
+#  hermes_curate:
+#    name: Curate HERMES results
+#    steps:
+#      - run: git archive --format zip HEAD src > showcase.zip
+#      - run: hermes deposit --initial --auth-token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
+#      - run: hermes postprocess
+#      - uses: peter-evans/create-pull-request@v4
+#        with:
+#          title: Review hermes post-processing results
+#          body: |
+#            This is an automated pull request created by hermes post-processing.
+#
+#            Please carefully review the changes and finally merge them into your
