@@ -1,25 +1,36 @@
 name: Software Publication
 
 on:
+  # create: # run on a new tag
   push:
+  pull_request:
+    - [closed]
 
 jobs:
   hermes-prepare:
     name: HERMES
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
     permissions:
       contents: write # Allow creation of new branches
       pull-requests: write # Postprocessing should be able to create a pull request with changes
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
       - run: pip install git+https://github.com/hermes-hmc/workflow.git@testing
       - run: hermes # harvest + process
       - run: hermes curate
-      - run: git branch -c curated-metadata
-      - run: git push origin curated-metadata
+      - run: |
+          # Create a curation branch
+          git branch -c curated-metadata
+          git push origin curated-metadata
+          
+          # Explicitly add to-be-curated metadata (which is ignored via .gitignore!)
+          git add -f .hermes/curate
       - uses: peter-evans/create-pull-request@v4
         with:
           base: curated-metadata
