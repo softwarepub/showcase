@@ -111,3 +111,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      # Delete all the curation branches
+      - run: |
+          for BRANCH in $(git ls-remote origin 'refs/heads/hermes/curate-*' | cut -f2 | cut -d'/' -f'3-'); do
+            git push origin --delete "$BRANCH"
+          done
