@@ -1,7 +1,6 @@
 name: Software Publication
 
 on:
-  # create: # run on a new tag
   push:
   pull_request:
     - [closed]
