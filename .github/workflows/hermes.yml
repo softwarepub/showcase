@@ -14,6 +14,8 @@ jobs:
   hermes-prepare:
     name: Prepare Metadata for Curation
     runs-on: ubuntu-latest
+    # This condition becomes much easier when we only react to push events on the release branch.
+    # We still need to exclude the merge commit push of the post processing PR
     if: >
       github.event_name == 'push' && ! (
         startsWith(github.ref_name, 'curated-metadata-') ||
@@ -40,8 +42,8 @@ jobs:
           git branch --show-current > .hermes/curate/target_branch
           
           # Create a curation branch
-          git branch -c curated-metadata-${{ github.run_id }}
-          git push origin curated-metadata-${{ github.run_id }}
+          git branch -c hermes/curate-${{ github.run_id }}
+          git push origin hermes/curate-${{ github.run_id }}
           
           # Explicitly add to-be-curated metadata (which is ignored via .gitignore!)
           git add -f .hermes/curate
@@ -50,8 +52,8 @@ jobs:
           echo "SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c -8)" >> "$GITHUB_ENV"
       - uses: peter-evans/create-pull-request@v4
         with:
-          base: curated-metadata-${{ github.run_id }}
-          branch: to-be-curated-${{ github.run_id }}
+          base: hermes/curate-${{ github.run_id }}
+          branch: hermes/curate-result-${{ github.run_id }}
           title: Metadata Curation for Commit ${{ env.SHORT_SHA }}
           body: |
             Please carefully review the attached metadata.
@@ -60,7 +62,7 @@ jobs:
 
   hermes-curate:
     name: Publish Software with Curated Metadata
-    if: github.event.pull_request.merged == true && startsWith( github.base_ref , 'curated-metadata-')
+    if: github.event.pull_request.merged == true && startsWith( github.base_ref , 'hermes/curate-')
 
     runs-on: ubuntu-latest
     permissions:
