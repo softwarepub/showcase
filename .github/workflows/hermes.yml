@@ -8,7 +8,7 @@ on:
 
 jobs:
   hermes-prepare:
-    name: HERMES
+    name: Prepare Metadata for Curation
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
@@ -26,8 +26,8 @@ jobs:
       - run: hermes curate
       - run: |
           # Create a curation branch
-          git branch -c curated-metadata
-          git push origin curated-metadata
+          git branch -c curated-metadata-${{ github.run_id }}
+          git push origin curated-metadata-${{ github.run_id }}
           
           # Explicitly add to-be-curated metadata (which is ignored via .gitignore!)
           git add -f .hermes/curate
