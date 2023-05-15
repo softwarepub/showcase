@@ -39,19 +39,20 @@ jobs:
           # Cache current branch for PR close job 
           git branch --show-current > .hermes/curate/target_branch
           
+          # Shorten the SHA for the PR title
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c -8)
+          echo "SHORT_SHA=$SHORT_SHA" >> "$GITHUB_ENV"
+          
           # Create a curation branch
-          git branch -c hermes/curate-${{ github.run_id }}
-          git push origin hermes/curate-${{ github.run_id }}
+          git branch -c "hermes/curate-$SHORT_SHA"
+          git push origin "hermes/curate-$SHORT_SHA"
           
           # Explicitly add to-be-curated metadata (which is ignored via .gitignore!)
           git add -f .hermes/curate
-          
-          # Shorten the SHA for the PR title
-          echo "SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c -8)" >> "$GITHUB_ENV"
       - uses: peter-evans/create-pull-request@v4
         with:
           base: hermes/curate-${{ github.run_id }}
-          branch: hermes/curate-result-${{ github.run_id }}
+          branch: hermes/curate-result-${{ env.SHORT_SHA }}
           title: Metadata Curation for Commit ${{ env.SHORT_SHA }}
           body: |
             Please carefully review the attached metadata.
