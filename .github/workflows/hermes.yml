@@ -27,6 +27,9 @@ jobs:
       - run: hermes curate
 
       - run: |      
+          # Cache current branch for PR close job 
+          git branch --show-current > .hermes/curate/target_branch
+          
           # Create a curation branch
           git branch -c curated-metadata-${{ github.run_id }}
           git push origin curated-metadata-${{ github.run_id }}
