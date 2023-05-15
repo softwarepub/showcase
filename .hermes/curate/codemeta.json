@@ -24,23 +24,30 @@
   "contributor": [
     {
       "@type": "Person",
-      "name": "Meinel, Michael",
-      "email": "michael.meinel@dlr.de",
+      "name": "Michael Meinel",
+      "email": "led02@me.com",
       "hermes:contributionRole": [
         {
           "@type": "Role",
           "roleName": "git author",
-          "startTime": "2023-05-15T14:39:56+02:00",
-          "endTime": "2023-05-15T14:39:56+02:00"
-        },
+          "startTime": "2023-05-15T14:41:26+02:00",
+          "endTime": "2023-05-15T14:41:26+02:00"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "hermes:contributionRole": [
         {
           "@type": "Role",
           "roleName": "git committer",
-          "startTime": "2023-05-15T14:39:56+02:00",
-          "endTime": "2023-05-15T14:39:56+02:00"
+          "startTime": "2023-05-15T14:41:26+02:00",
+          "endTime": "2023-05-15T14:41:26+02:00"
         }
       ]
     }
   ],
-  "hermes:gitBranch": "use-post-processing"
+  "hermes:gitBranch": "curated-metadata-4980451035"
 }
