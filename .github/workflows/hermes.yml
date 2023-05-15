@@ -16,13 +16,9 @@ jobs:
       contents: write # Allow creation of new branches
       pull-requests: write # Postprocessing should be able to create a pull request with changes
 
-    outputs:
-      target_branch: ${{ steps.git_info.outputs.branch_name }}
-
     steps:
       - uses: actions/checkout@v3
-      - run: echo "branch_name=$(git branch --show-current)" >> "$GITHUB_OUTPUT"
-        id: git_info
+      - run: git branch --show-current >> .hermes/curate/target_branch
 
       - uses: actions/setup-python@v4
         with:
@@ -56,8 +52,6 @@ jobs:
     permissions:
       contents: write # Allow creation of new branches
       pull-requests: write # Postprocessing should be able to create a pull request with changes
-
-    needs: hermes-prepare
 
     steps:
       - uses: actions/checkout@v3
