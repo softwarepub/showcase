@@ -65,9 +65,15 @@ jobs:
       # Export your artifacts (in some way, might need adaption to your project)
       - run: git archive --format zip HEAD src > showcase.zip
 
+      # Run the HERMES deposition and postprocessing steps.
       - run: hermes deposit --initial --auth-token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
       - run: hermes postprocess
 
+      # Note 1: We change the base branch here for the PR. This flow runs so far within the "curated-metadata-*" branch,
+      #         but now we want to add the changes done by deposit and post processing to the branch that was initially
+      #         said to be published using HERMES.
+      # Note 2: The c-r-p action will NOT inherit the commits we did in the previous job. It will only look at the
+      #         changes within this local workspace we did *now*.
       - run: echo "TARGET_BRANCH=$(cat .hermes/curate/target_branch)" >> "$GITHUB_ENV"
       - uses: peter-evans/create-pull-request@v4
         with:
