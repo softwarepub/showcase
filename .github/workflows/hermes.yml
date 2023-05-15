@@ -65,10 +65,12 @@ jobs:
 
       - run: hermes deposit --initial --auth-token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
       - run: hermes postprocess
+
+      - run: echo "TARGET_BRANCH=$(cat .hermes/curate/target_branch)" >> "$GITHUB_ENV"
       - uses: peter-evans/create-pull-request@v4
         with:
-          branch: hermes-post-
-          base: ${{ needs.hermes-prepare.outputs.target_branch }}
+          branch: hermes-post-${{ github.run_id }}
+          base: ${{ env.TARGET_BRANCH }}
           title: Review hermes post-processing results
           body: |
             This is an automated pull request created by HERMES post-processing.
