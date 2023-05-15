@@ -44,6 +44,11 @@ jobs:
   hermes_curate:
     name: Publish Software with Curated Metadata
     if: github.event.pull_request.merged == true && startsWith( github.base_ref , "curated-metadata-")
+
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write # Postprocessing should be able to create a pull request with changes
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
