@@ -1,5 +1,7 @@
-# Python files not to be version controlled
+# Custom files
+showcase.zip
 
+# Python files not to be version controlled
 __pycache__
 
 .coverage
