@@ -51,7 +51,7 @@ jobs:
           git add -f .hermes/curate
       - uses: peter-evans/create-pull-request@v4
         with:
-          base: hermes/curate-${{ github.run_id }}
+          base: hermes/curate-${{ env.SHORT_SHA }}
           branch: hermes/curate-result-${{ env.SHORT_SHA }}
           title: Metadata Curation for Commit ${{ env.SHORT_SHA }}
           body: |
