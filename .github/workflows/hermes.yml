@@ -89,3 +89,16 @@ jobs:
             This is an automated pull request created by HERMES post-processing.
 
             Please carefully review the changes and finally merge them into your
+
+      # TODO: cleanup the curation branches
+
+  hermes-cleanup:
+    name: Cleanup aborted curation branches
+    if: github.event.pull_request.merged == false && startsWith( github.base_ref , 'curated-metadata-')
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Allow creation of new branches
+      pull-requests: write # Postprocessing should be able to create a pull request with changes
+
+    steps:
