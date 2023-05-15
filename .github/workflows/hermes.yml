@@ -18,7 +18,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: git branch --show-current >> .hermes/curate/target_branch
 
       - uses: actions/setup-python@v4
         with:
