@@ -10,7 +10,7 @@ jobs:
   hermes-prepare:
     name: Prepare Metadata for Curation
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && ! startsWith( github.ref_name, 'curated-metadata-' ) && ! startsWith( github.ref_name, 'to-be-curated-' )
 
     permissions:
       contents: write # Allow creation of new branches
@@ -47,6 +47,7 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
+      contents: write # Allow creation of new branches
       pull-requests: write # Postprocessing should be able to create a pull request with changes
 
     steps:
