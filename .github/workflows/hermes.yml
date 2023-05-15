@@ -43,7 +43,7 @@ jobs:
 
   hermes_curate:
     name: Publish Software with Curated Metadata
-    if: github.event.pull_request.merged == true && startsWith( github.base_ref , "curated-metadata-")
+    if: github.event.pull_request.merged == true && startsWith( github.base_ref , 'curated-metadata-')
 
     runs-on: ubuntu-latest
     permissions:
