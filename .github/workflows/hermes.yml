@@ -16,15 +16,22 @@ jobs:
       contents: write # Allow creation of new branches
       pull-requests: write # Postprocessing should be able to create a pull request with changes
 
+    outputs:
+      target_branch: ${{ steps.git_info.outputs.branch_name }}
+
     steps:
       - uses: actions/checkout@v3
+      - run: echo "branch_name=$(git branch --show-current)" >> "$GITHUB_OUTPUT"
+        id: git_info
+
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
       - run: pip install git+https://github.com/hermes-hmc/workflow.git@testing
       - run: hermes # harvest + process
       - run: hermes curate
-      - run: |
+
+      - run: |      
           # Create a curation branch
           git branch -c curated-metadata-${{ github.run_id }}
           git push origin curated-metadata-${{ github.run_id }}
@@ -41,7 +48,7 @@ jobs:
             If you are satisfied with the result, you may merge this PR, which will trigger deposition.
             (Any temporary branches will be cleaned up.)
 
-  hermes_curate:
+  hermes-curate:
     name: Publish Software with Curated Metadata
     if: github.event.pull_request.merged == true && startsWith( github.base_ref , 'curated-metadata-')
 
@@ -49,6 +56,8 @@ jobs:
     permissions:
       contents: write # Allow creation of new branches
       pull-requests: write # Postprocessing should be able to create a pull request with changes
+
+    needs: hermes-prepare
 
     steps:
       - uses: actions/checkout@v3
@@ -64,6 +73,8 @@ jobs:
       - run: hermes postprocess
       - uses: peter-evans/create-pull-request@v4
         with:
+          branch: hermes-post-
+          base: ${{ needs.hermes-prepare.outputs.target_branch }}
           title: Review hermes post-processing results
           body: |
             This is an automated pull request created by HERMES post-processing.
