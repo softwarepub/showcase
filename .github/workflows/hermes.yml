@@ -10,7 +10,12 @@ jobs:
   hermes-prepare:
     name: Prepare Metadata for Curation
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && ! startsWith( github.ref_name, 'curated-metadata-' ) && ! startsWith( github.ref_name, 'to-be-curated-' )
+    if: >
+      github.event_name == 'push' && ! (
+        startsWith(github.ref_name, 'curated-metadata-') ||
+        startsWith(github.ref_name, 'to-be-curated-') ||
+        startsWith(github.ref_name, 'hermes-post-')
+      )
 
     permissions:
       contents: write # Allow creation of new branches
