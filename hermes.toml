@@ -6,7 +6,7 @@ mapping = "invenio"
 target = "invenio"
 
 [post]
-process = [ "config_record_id" ]
+process = [ "config_record_id", "cff_doi",]
 
 [harvest.cff]
 validate = false
@@ -14,3 +14,4 @@ validate = false
 [deposit.invenio]
 site_url = "https://sandbox.zenodo.org"
 access_right = "open"
+record_id = 1202579
