@@ -57,6 +57,7 @@ jobs:
             Please carefully review the attached metadata.
             If you are satisfied with the result, you may merge this PR, which will trigger deposition.
             (Any temporary branches will be cleaned up.)
+          delete-branch: true
 
   hermes-curate:
     name: Publish Software with Curated Metadata
@@ -108,4 +109,5 @@ jobs:
       contents: write # Allow creation of new branches
       pull-requests: write # Postprocessing should be able to create a pull request with changes
 
-    steps: []
+    steps:
+      - uses: actions/checkout@v3
