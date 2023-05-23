@@ -1,24 +1,131 @@
+# SPDX-FileCopyrightText: 2023 German Aerospace Center (DLR), Forschungszentrum Jülich, Helmholtz-Zentrum Dresden-Rossendorf
+#
+# SPDX-License-Identifier: CC0-1.0
+
 name: Software Publication
 
 on:
+  # Publish on push to main stable/production branch
   push:
+    branches:
+      - main
+  # NOTE: Do not delete the trigger on closed pull requests, the HERMES workflow needs this.
+  pull_request:
+    types:
+      - closed
 
 jobs:
-  hermes:
-    name: HERMES
+  hermes-prepare:
+    name: Prepare Metadata for Curation
     runs-on: ubuntu-latest
+    # NOTE: You will probably still need to keep the exclusion check for commit messages provided by the workflow ('hermes/'/'hermes/post').
+    if: >
+      github.event_name == 'push' && ! (
+        startsWith(github.ref_name, 'hermes/') ||
+        contains(github.event.head_commit.message, 'hermes/post')
+      )
+
     permissions:
-      contents: read # We will only read content from the repo
-      # pull-requests: write # Postprocessing should be able to create a pull request with changes
+      contents: write # Allow creation of new branches
+      pull-requests: write # Postprocessing should be able to create a pull request with changes
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - run: pip install git+https://github.com/hermes-hmc/workflow.git@develop
-      - run: git archive --format zip HEAD src > showcase.zip
-      - run: hermes
+      - run: pip install git+https://github.com/hermes-hmc/workflow.git
+      - run: hermes harvest
+      - run: hermes process
       - run: hermes curate
-      - run: hermes deposit --auth-token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
-      # - run: hermes postprocess # (Not implemented yet)
-      # - uses: peter-evans/create-pull-request@v4 (TODO once postprocessing has it)
+
+      - run: |      
+          # Cache current branch for PR close job 
+          git branch --show-current > .hermes/curate/target_branch
+          
+          # Shorten the SHA for the PR title
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c -8)
+          echo "SHORT_SHA=$SHORT_SHA" >> "$GITHUB_ENV"
+          
+          # Create a curation branch
+          git branch -c "hermes/curate-$SHORT_SHA"
+          git push origin "hermes/curate-$SHORT_SHA"
+          
+          # Explicitly add to-be-curated metadata (which is ignored via .gitignore!)
+          git add -f .hermes/curate
+      - uses: peter-evans/create-pull-request@v5
+        with:
+          base: hermes/curate-${{ env.SHORT_SHA }}
+          branch: hermes/curate-result-${{ env.SHORT_SHA }}
+          title: Metadata Curation for Commit ${{ env.SHORT_SHA }}
+          body: |
+            Please carefully review the attached metadata.
+            If you are satisfied with the result, you may merge this PR, which will trigger publication.
+            (Any temporary branches will be cleaned up.)
+          delete-branch: true
+
+  hermes-curate:
+    name: Publish Software with Curated Metadata
+    if: github.event.pull_request.merged == true && startsWith( github.base_ref , 'hermes/curate-')
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Allow creation of new branches
+      pull-requests: write # Postprocessing should be able to create a pull request with changes
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install git+https://github.com/hermes-hmc/workflow.git
+
+      # We want to include a ZIP export of our source files
+      - run: git archive --format zip HEAD src > showcase.zip
+
+      # Run the HERMES deposition and postprocessing steps. (Also allow to create a completely new publication with --initial)
+      - run: hermes deposit --initial --auth-token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
+
+      # Remove this command if you don't want to do any postprocessing
+      - run: hermes postprocess
+
+      # Note 1: We change the base branch here for the PR. This flow runs so far within the "curated-metadata-*" branch,
+      #         but now we want to add the changes done by deposit and post processing to the branch that was initially
+      #         meant to be published using HERMES.
+      # Note 2: The create-pull-request action will NOT inherit the commits we did in the previous job. It will only look at the
+      #         changes within this local workspace we did *now*.
+      - run: echo "TARGET_BRANCH=$(cat .hermes/curate/target_branch)" >> "$GITHUB_ENV"
+      - uses: peter-evans/create-pull-request@v5
+        with:
+          branch: hermes/post-${{ github.run_id }}
+          base: ${{ env.TARGET_BRANCH }}
+          title: Review hermes post-processing results
+          body: |
+            This is an automated pull request created by HERMES post-processing.
+
+            Please carefully review the changes and finally merge them into your
+
+      # Delete all the curation branches
+      - run: |
+          for BRANCH in $(git ls-remote origin 'refs/heads/hermes/curate-*' | cut -f2 | cut -d'/' -f'3-'); do
+            git push origin --delete "$BRANCH"
+          done
+      # TODO: if: failure() --- delete the curation branches when the deposition failed
+          
+
+  hermes-cleanup:
+    name: Cleanup aborted curation branches
+    if: github.event.pull_request.merged == false && startsWith( github.base_ref , 'hermes/curate-')
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Allow creation of new branches
+      pull-requests: write # Postprocessing should be able to create a pull request with changes
+
+    steps:
+      - uses: actions/checkout@v3
+      # Delete all the curation branches
+      - run: |
+          for BRANCH in $(git ls-remote origin 'refs/heads/hermes/curate-*' | cut -f2 | cut -d'/' -f'3-'); do
+            git push origin --delete "$BRANCH"
+          done

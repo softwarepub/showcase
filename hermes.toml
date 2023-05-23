@@ -2,7 +2,7 @@
 # See also docs at https://docs.software-metadata.pub for more info.
 
 [harvest]
-from = [ "cff", "git" ]
+from = [ "git", "cff" ]
 
 [harvest.cff]
 validate = false
@@ -13,3 +13,7 @@ target = "invenio"
 
 [deposit.invenio]
 site_url = "https://sandbox.zenodo.org"
+access_right = "open"
+
+[postprocess]
+execute = [ "config_record_id" ]
