@@ -6,6 +6,8 @@ message: >-
 type: software
 license: CC0-1.0
 authors:
+  - given-names: Stephan
+    family-names: Druskat
   - given-names: Ahsoka
     family-names: Tano
     email: tano@jeditemple.force
