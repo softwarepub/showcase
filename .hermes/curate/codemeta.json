@@ -1,0 +1,46 @@
+{
+  "contributor": [
+    {
+      "@type": "Person",
+      "name": "Oliver Bertuch",
+      "email": "o.bertuch@fz-juelich.de",
+      "hermes:contributionRole": [
+        {
+          "@type": "Role",
+          "roleName": "git author",
+          "startTime": "2023-05-23T14:16:12+02:00",
+          "endTime": "2023-05-23T14:16:12+02:00"
+        },
+        {
+          "@type": "Role",
+          "roleName": "git committer",
+          "startTime": "2023-05-23T14:16:12+02:00",
+          "endTime": "2023-05-23T14:16:12+02:00"
+        }
+      ]
+    }
+  ],
+  "hermes:gitBranch": "main",
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    {
+      "hermes": "https://software-metadata.pub/ns/hermes/"
+    }
+  ],
+  "@type": "SoftwareSourceCode",
+  "author": [
+    {
+      "@id": "http://orcid.org/0000-0001-9338-6966",
+      "@type": "Person",
+      "affiliation": {
+        "@type": "Organization",
+        "legalName": "Jedi Temple Coruscant"
+      },
+      "email": "tano@jeditemple.force",
+      "familyName": "Tano",
+      "givenName": "Ahsoka"
+    }
+  ],
+  "license": "https://spdx.org/licenses/CC0-1.0",
+  "name": "HERMES Showcase"
+}
