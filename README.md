@@ -11,6 +11,7 @@ Example usage of the [HERMES workflow](https://docs.software-metadata.pub) (`her
 - [How to create Github Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
 - [HERMES workflow project on GitHub](https://github.com/hermes-hmc/workflow)
 
+
 # How to give feedback
 
 Either [create an issue](https://github.com/hermes-hmc/workflow/issues/new/choose) in our project repository or
