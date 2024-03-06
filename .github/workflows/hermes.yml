@@ -84,7 +84,7 @@ jobs:
       - run: git archive --format zip HEAD src > showcase.zip
 
       # Run the HERMES deposition and postprocessing steps. (Also allow to create a completely new publication with --initial)
-      - run: hermes deposit --initial -O invenio_rdm.auth-token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
+      - run: hermes deposit --initial -O invenio_rdm.auth_token ${{ secrets.ZENODO_SANDBOX }} --file showcase.zip --file README.md
 
       # Remove this command if you don't want to do any postprocessing
       - run: hermes postprocess
