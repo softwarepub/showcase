@@ -4,7 +4,8 @@ message: >-
   If you use this software, please cite it using the
   metadata from this file.
 type: software
-license: CC0-1.0
+license: "CC0-1.0"
+version: 0.1.0
 authors:
   - given-names: Stephan
     family-names: Druskat
