@@ -1,0 +1,30 @@
+{
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    {
+      "hermes": "https://software-metadata.pub/ns/hermes/"
+    }
+  ],
+  "@type": "SoftwareSourceCode",
+  "author": [
+    {
+      "@type": "Person",
+      "familyName": "Druskat",
+      "givenName": "Stephan"
+    },
+    {
+      "@id": "http://orcid.org/0000-0001-9338-6966",
+      "@type": "Person",
+      "affiliation": {
+        "@type": "Organization",
+        "legalName": "Jedi Temple Coruscant"
+      },
+      "familyName": "Tano",
+      "givenName": "Ahsoka",
+      "email": "tano@jeditemple.force"
+    }
+  ],
+  "license": "https://spdx.org/licenses/CC0-1.0",
+  "name": "HERMES Showcase",
+  "version": "0.1.0"
+}
